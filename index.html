@@ -1,716 +1,101 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Weekly Dashboard — Phòng OpenBanking · PVcomBank</title>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0a0f1e;
-    --bg2: #111827;
-    --bg3: #1a2236;
-    --border: rgba(255,255,255,0.07);
-    --border2: rgba(255,255,255,0.12);
-    --text: #e8edf5;
-    --text2: #8b9ab5;
-    --text3: #4a5878;
-    --green: #10d9a0;
-    --green-bg: rgba(16,217,160,0.1);
-    --amber: #f5a623;
-    --amber-bg: rgba(245,166,35,0.1);
-    --red: #ff5b6b;
-    --red-bg: rgba(255,91,107,0.1);
-    --blue: #4d9fff;
-    --blue-bg: rgba(77,159,255,0.1);
-    --purple: #a78bfa;
-    --purple-bg: rgba(167,139,250,0.1);
-    --accent: #10d9a0;
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: 'Be Vietnam Pro', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  /* Background grid */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(16,217,160,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(16,217,160,0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem 1.5rem;
-    position: relative;
-    z-index: 1;
-  }
-
-  /* HEADER */
-  .header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: 2.5rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid var(--border2);
-    gap: 1rem;
-  }
-
-  .header-left {}
-
-  .header-tag {
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    color: var(--accent);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    margin-bottom: 0.5rem;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .header-tag::before {
-    content: '';
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--accent);
-    animation: blink 2s infinite;
-  }
-
-  @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.2; }
-  }
-
-  .header h1 {
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--text);
-    line-height: 1.2;
-    letter-spacing: -0.02em;
-  }
-
-  .header h1 span { color: var(--accent); }
-
-  .header-meta {
-    font-size: 13px;
-    color: var(--text2);
-    margin-top: 6px;
-  }
-
-  .header-right {
-    text-align: right;
-    flex-shrink: 0;
-  }
-
-  .week-badge {
-    display: inline-block;
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    padding: 6px 14px;
-    border: 1px solid var(--accent);
-    border-radius: 4px;
-    color: var(--accent);
-    background: var(--green-bg);
-    letter-spacing: 0.05em;
-    margin-bottom: 6px;
-  }
-
-  .update-time {
-    font-size: 11px;
-    color: var(--text3);
-  }
-
-  /* METRICS ROW */
-  .metrics {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    margin-bottom: 2rem;
-  }
-
-  .metric {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 1.125rem 1.25rem;
-    position: relative;
-    overflow: hidden;
-    transition: border-color 0.2s;
-  }
-
-  .metric::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-  }
-
-  .metric.green::before { background: var(--green); }
-  .metric.amber::before { background: var(--amber); }
-  .metric.blue::before { background: var(--blue); }
-  .metric.purple::before { background: var(--purple); }
-
-  .metric-label {
-    font-size: 11px;
-    color: var(--text3);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 8px;
-  }
-
-  .metric-value {
-    font-family: 'Space Mono', monospace;
-    font-size: 32px;
-    font-weight: 700;
-    line-height: 1;
-    margin-bottom: 4px;
-  }
-
-  .metric.green .metric-value { color: var(--green); }
-  .metric.amber .metric-value { color: var(--amber); }
-  .metric.blue .metric-value { color: var(--blue); }
-  .metric.purple .metric-value { color: var(--purple); }
-
-  .metric-sub { font-size: 12px; color: var(--text2); }
-
-  /* TEAM TABS */
-  .section-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    color: var(--text3);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    margin-bottom: 1rem;
-  }
-
-  .team-tabs {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 1.5rem;
-    flex-wrap: wrap;
-  }
-
-  .tab {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 18px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: var(--bg2);
-    cursor: pointer;
-    transition: all 0.2s;
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text2);
-  }
-
-  .tab:hover { border-color: var(--border2); color: var(--text); }
-
-  .tab.active {
-    background: var(--bg3);
-    border-color: var(--accent);
-    color: var(--text);
-  }
-
-  .tab-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  .tab-status {
-    font-size: 10px;
-    padding: 2px 7px;
-    border-radius: 4px;
-    font-weight: 600;
-    font-family: 'Space Mono', monospace;
-  }
-
-  /* DETAIL PANEL */
-  .detail-panel {
-    background: var(--bg2);
-    border: 1px solid var(--border2);
-    border-radius: 12px;
-    overflow: hidden;
-    animation: fadeIn 0.25s ease;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .panel-header {
-    padding: 1.25rem 1.5rem;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-  }
-
-  .panel-header-left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .team-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    flex-shrink: 0;
-  }
-
-  .panel-title { font-size: 16px; font-weight: 600; }
-  .panel-sub { font-size: 12px; color: var(--text2); margin-top: 2px; }
-
-  .status-badge {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-weight: 500;
-    flex-shrink: 0;
-  }
-
-  /* WARN/INFO BANNERS */
-  .banner {
-    margin: 1rem 1.5rem 0;
-    padding: 10px 14px;
-    border-radius: 8px;
-    font-size: 12px;
-    line-height: 1.5;
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-  }
-
-  .banner.warn { background: var(--amber-bg); border: 1px solid rgba(245,166,35,0.2); color: #f5c842; }
-  .banner.info { background: var(--green-bg); border: 1px solid rgba(16,217,160,0.2); color: var(--green); }
-
-  .banner-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
-
-  /* 3-COLUMN GRID */
-  .col-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0;
-  }
-
-  .col {
-    padding: 1.25rem 1.5rem;
-    border-right: 1px solid var(--border);
-  }
-
-  .col:last-child { border-right: none; }
-
-  .col-header {
-    font-size: 10px;
-    font-family: 'Space Mono', monospace;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    margin-bottom: 1rem;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .work-item {
-    padding: 8px 0;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    gap: 8px;
-  }
-
-  .work-item:last-child { border-bottom: none; }
-
-  .item-line {
-    width: 2px;
-    border-radius: 2px;
-    flex-shrink: 0;
-    margin-top: 4px;
-    align-self: stretch;
-    min-height: 16px;
-  }
-
-  .item-content { flex: 1; }
-
-  .item-text {
-    font-size: 12.5px;
-    line-height: 1.5;
-    color: var(--text);
-  }
-
-  .item-tag {
-    display: inline-block;
-    font-size: 10px;
-    padding: 1px 7px;
-    border-radius: 3px;
-    margin-top: 4px;
-    font-weight: 500;
-    background: var(--blue-bg);
-    color: var(--blue);
-    border: 1px solid rgba(77,159,255,0.2);
-  }
-
-  .item-tag.new {
-    background: var(--green-bg);
-    color: var(--green);
-    border-color: rgba(16,217,160,0.2);
-    margin-left: 4px;
-  }
-
-  /* FOOTER */
-  .footer {
-    margin-top: 2.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 12px;
-    color: var(--text3);
-  }
-
-  .footer-left { display: flex; align-items: center; gap: 8px; }
-  .footer-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
-
-  /* Responsive */
-  @media (max-width: 768px) {
-    .metrics { grid-template-columns: repeat(2, 1fr); }
-    .col-grid { grid-template-columns: 1fr; }
-    .col { border-right: none; border-bottom: 1px solid var(--border); }
-    .col:last-child { border-bottom: none; }
-    .header { flex-direction: column; }
-    .header-right { text-align: left; }
-  }
+:root{--bg:#0a0f1e;--bg2:#111827;--bg3:#1a2236;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--text:#e8edf5;--text2:#8b9ab5;--text3:#4a5878;--green:#10d9a0;--amber:#f5a623;--blue:#4d9fff;--purple:#a78bfa;--accent:#10d9a0}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(16,217,160,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(16,217,160,0.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
+.wrap{max-width:1200px;margin:0 auto;padding:2rem 1.5rem;position:relative;z-index:1}
+.hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border2);gap:1rem}
+.hdr-tag{font-family:'Space Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:6px}
+.hdr-tag::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+h1{font-size:26px;font-weight:700;line-height:1.2;letter-spacing:-.02em}
+h1 span{color:var(--accent)}
+.hdr-meta{font-size:13px;color:var(--text2);margin-top:6px}
+.hdr-r{text-align:right;flex-shrink:0}
+.wk{display:inline-block;font-family:'Space Mono',monospace;font-size:11px;padding:6px 14px;border:1px solid var(--accent);border-radius:4px;color:var(--accent);background:rgba(16,217,160,0.1);letter-spacing:.05em;margin-bottom:6px}
+.upd{font-size:11px;color:var(--text3)}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:2rem}
+.mc{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;position:relative;overflow:hidden}
+.mc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.mc.g::before{background:var(--green)}.mc.a::before{background:var(--amber)}.mc.b::before{background:var(--blue)}.mc.p::before{background:var(--purple)}
+.ml{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.mv{font-family:'Space Mono',monospace;font-size:30px;font-weight:700;line-height:1;margin-bottom:4px}
+.mc.g .mv{color:var(--green)}.mc.a .mv{color:var(--amber)}.mc.b .mv{color:var(--blue)}.mc.p .mv{color:var(--purple)}
+.ms{font-size:12px;color:var(--text2)}
+.slbl{font-family:'Space Mono',monospace;font-size:10px;color:var(--text3);letter-spacing:.15em;text-transform:uppercase;margin-bottom:1rem}
+.tabs{display:flex;gap:8px;margin-bottom:1.5rem;flex-wrap:wrap}
+.tab{display:flex;align-items:center;gap:8px;padding:10px 18px;border-radius:8px;border:1px solid var(--border);background:var(--bg2);cursor:pointer;transition:all .2s;font-size:13px;font-weight:500;color:var(--text2)}
+.tab:hover{border-color:var(--border2);color:var(--text)}.tab.active{background:var(--bg3);border-color:var(--accent);color:var(--text)}
+.tdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.tstt{font-size:10px;padding:2px 7px;border-radius:4px;font-weight:600;font-family:'Space Mono',monospace}
+.panel{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;overflow:hidden;animation:fi .25s ease}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.ph{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.phl{display:flex;align-items:center;gap:12px}
+.tico{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.pt{font-size:16px;font-weight:600}.ps{font-size:12px;color:var(--text2);margin-top:2px}
+.sbdg{display:flex;align-items:center;gap:6px;font-size:12px;padding:6px 12px;border-radius:6px;font-weight:500;flex-shrink:0}
+.banner{margin:1rem 1.5rem 0;padding:10px 14px;border-radius:8px;font-size:12px;line-height:1.5}
+.banner.warn{background:rgba(245,166,35,0.1);border:1px solid rgba(245,166,35,0.2);color:#f5c842}
+.cg{display:grid;grid-template-columns:repeat(3,1fr)}
+.col{padding:1.25rem 1.5rem;border-right:1px solid var(--border)}.col:last-child{border-right:none}
+.ch{font-size:10px;font-family:'Space Mono',monospace;letter-spacing:.12em;text-transform:uppercase;margin-bottom:1rem;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.work-item{padding:8px 0;border-bottom:1px solid var(--border);display:flex;gap:8px}.work-item:last-child{border-bottom:none}
+.item-line{width:2px;border-radius:2px;flex-shrink:0;margin-top:4px;align-self:stretch;min-height:16px}
+.item-content{flex:1}.item-text{font-size:12.5px;line-height:1.5;color:var(--text)}
+.tag{display:inline-block;font-size:10px;padding:1px 7px;border-radius:3px;margin-top:4px;font-weight:500}
+.tag.partner{background:rgba(77,159,255,0.1);color:var(--blue);border:1px solid rgba(77,159,255,0.2)}
+.tag.new{background:rgba(16,217,160,0.1);color:var(--green);border:1px solid rgba(16,217,160,0.2);margin-left:4px}
+.empty{font-size:12px;color:var(--text3);padding:8px 0}
+.ftr{margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--text3)}
+.fdot{width:5px;height:5px;border-radius:50%;background:var(--accent)}
+@media(max-width:768px){.metrics{grid-template-columns:repeat(2,1fr)}.cg{grid-template-columns:1fr}.col{border-right:none;border-bottom:1px solid var(--border)}.col:last-child{border-bottom:none}.hdr{flex-direction:column}.hdr-r{text-align:left}}
 </style>
 </head>
 <body>
-<div class="container">
-
-  <!-- HEADER -->
-  <div class="header">
-    <div class="header-left">
-      <div class="header-tag">PVcomBank · Trung tâm kinh doanh kênh số</div>
+<div class="wrap">
+  <div class="hdr">
+    <div>
+      <div class="hdr-tag">PVcomBank · Trung tâm kinh doanh kênh số</div>
       <h1>Weekly Dashboard<br><span>Phòng OpenBanking</span></h1>
-      <div class="header-meta">Theo dõi tiến độ 5 team kinh doanh · Cập nhật hàng tuần</div>
+      <div class="hdr-meta">Theo dõi tiến độ 5 team kinh doanh · Cập nhật hàng tuần</div>
     </div>
-    <div class="header-right">
-      <div class="week-badge" id="weekBadge">TUẦN 01 – 05/06/2026</div>
-      <div class="update-time" id="updateTime">Cập nhật: 05/06/2026</div>
+    <div class="hdr-r">
+      <div class="wk">WEEK 08</div>
+      <div class="upd">Cập nhật: 09/06/2026</div>
     </div>
   </div>
-
-  <!-- METRICS -->
   <div class="metrics">
-    <div class="metric green">
-      <div class="metric-label">Teams đúng tiến độ</div>
-      <div class="metric-value" id="m1">4</div>
-      <div class="metric-sub">Trên tổng 5 team</div>
-    </div>
-    <div class="metric amber">
-      <div class="metric-label">Có vướng mắc</div>
-      <div class="metric-value" id="m2">1</div>
-      <div class="metric-sub">Team Phong · Chờ phê duyệt</div>
-    </div>
-    <div class="metric blue">
-      <div class="metric-label">Đối tác mới tuần này</div>
-      <div class="metric-value" id="m3">2</div>
-      <div class="metric-sub">Liên cấp Thực Nghiệm · BV TW Huế</div>
-    </div>
-    <div class="metric purple">
-      <div class="metric-label">Dự án đang golive</div>
-      <div class="metric-value" id="m4">3</div>
-      <div class="metric-sub">Đông Đô · Bách Khoa · EHC</div>
-    </div>
+    <div class="mc g"><div class="ml">Teams đúng tiến độ</div><div class="mv">5</div><div class="ms">Trên tổng 5 team</div></div>
+    <div class="mc a"><div class="ml">Có vướng mắc</div><div class="mv">0</div><div class="ms">Cần theo dõi sát</div></div>
+    <div class="mc b"><div class="ml">Đối tác mới</div><div class="mv">0</div><div class="ms">Tuần này</div></div>
+    <div class="mc p"><div class="ml">Dự án golive</div><div class="mv">0</div><div class="ms">Đang vận hành</div></div>
   </div>
-
-  <!-- TEAMS -->
-  <div class="section-label">// Chi tiết theo team</div>
-  <div class="team-tabs" id="teamTabs"></div>
-  <div class="detail-panel" id="detailPanel"></div>
-
-  <!-- FOOTER -->
-  <div class="footer">
-    <div class="footer-left">
-      <div class="footer-dot"></div>
-      <span>Nguồn dữ liệu: Google Drive · PVcomBank OpenBanking</span>
-    </div>
-    <span>Cập nhật thủ công hàng tuần mỗi thứ 6</span>
+  <div class="slbl">// Chi tiết theo team</div>
+  <div class="tabs" id="tabs"></div>
+  <div class="panel" id="panel"></div>
+  <div class="ftr">
+    <div style="display:flex;align-items:center;gap:8px"><div class="fdot"></div><span>Nguồn: từ 1 - 5 tháng 6 - 1 DB WEEKLY UPDATE_team KD openbanking.pptx</span></div>
+    <span>Auto-updated · github.com/phongnh19/Weekly-Dashboard-OpenBanking</span>
   </div>
-
 </div>
-
 <script>
-// ============================================================
-// DATA — CẬP NHẬT PHẦN NÀY MỖI TUẦN
-// ============================================================
-const WEEK_LABEL = "TUẦN 01 – 05/06/2026";
-const UPDATE_DATE = "05/06/2026";
-const NEXT_WEEK = "Kế hoạch 08 – 12/06/2026";
-
-const METRICS = {
-  m1: { value: "4", sub: "Trên tổng 5 team" },
-  m2: { value: "1", sub: "Team Phong · Chờ phê duyệt" },
-  m3: { value: "2", sub: "Liên cấp Thực Nghiệm · BV TW Huế" },
-  m4: { value: "3", sub: "Đông Đô · Bách Khoa · EHC" },
-};
-
-const TEAMS = [
-  {
-    id: "bach",
-    name: "Team Bách",
-    sub: "Y tế · Phòng khám",
-    icon: "🏥",
-    iconBg: "rgba(239,68,68,0.15)",
-    dotColor: "#10d9a0",
-    status: "Đúng tiến độ",
-    statusColor: "#10d9a0",
-    statusBg: "rgba(16,217,160,0.1)",
-    warn: null,
-    info: "Mở thêm đầu mối BV TW Huế và CN Bùi Thị Xuân tuần này — pipeline mở rộng tốt.",
-    done: [
-      { text: "Hoàn thành trình chủ trương EHC", partner: "EHC" },
-      { text: "Review HĐ kết nối CN Bình Dương và BV Quốc Oai", partner: "BV Quốc Oai" },
-      { text: "Đề xuất APIS phối hợp pilot phân tích chân dung KH", partner: "APIS" },
-      { text: "Giới thiệu ĐVCNTT cho VietPay", partner: "VietPay" },
-      { text: "Trình ý kiến TCKT về TTr màn hình QR — BV 7A & Tâm thần Mỹ Đức", partner: "BV 7A" },
-      { text: "Hoàn thiện HĐ với IPOS", partner: "IPOS" },
-    ],
-    doing: [
-      { text: "Phối hợp triển khai thí điểm với EHC", partner: "EHC" },
-      { text: "Review HĐ cho BV TW Huế và BV Quốc Oai", partner: "BV TW Huế", isNew: true },
-      { text: "Trình chi phí kết nối BV ĐK Hà Đông và Sơn Tây", partner: "BV Sơn Tây" },
-    ],
-    plan: [
-      { text: "Giới thiệu ĐVCNTT cho chi nhánh Bùi Thị Xuân", partner: "CN Bùi Thị Xuân", isNew: true },
-      { text: "Tiếp tục hoàn thiện HĐ với IPOS", partner: "IPOS" },
-      { text: "Theo dõi tiến độ TTr màn hình QR BV 7A & Tâm thần Mỹ Đức", partner: "BV 7A" },
-    ],
-  },
-  {
-    id: "phong",
-    name: "Team Phong",
-    sub: "Viễn thông · HKD",
-    icon: "📡",
-    iconBg: "rgba(77,159,255,0.15)",
-    dotColor: "#f5a623",
-    status: "Chờ phê duyệt",
-    statusColor: "#f5a623",
-    statusBg: "rgba(245,166,35,0.1)",
-    warn: "MobiFone vẫn đang chờ phê duyệt — tiếp tục triển khai sản phẩm thành phần trước. Lịch họp Viettel–ĐHQG chưa chốt. Cần theo dõi sát.",
-    info: null,
-    done: [
-      { text: "Dự thảo phương án triển khai ví điện tử", partner: "Ví điện tử" },
-      { text: "Tinh chỉnh luồng onboarding HKD — giới thiệu đối tác CKS", partner: "HKD" },
-      { text: "Họp định kỳ — đồng bộ tiến độ nội bộ", partner: "Nội bộ" },
-    ],
-    doing: [
-      { text: "Triển khai sản phẩm thành phần MobiFone trước khi có phê duyệt tổng", partner: "MobiFone" },
-      { text: "Bố trí lịch họp Viettel – ĐH Quốc Gia – PVcomBank", partner: "Viettel / ĐHQG" },
-    ],
-    plan: [
-      { text: "Hoàn thiện phương án ví điện tử", partner: "Ví điện tử" },
-      { text: "Chốt lịch họp 3 bên Viettel – ĐHQG – PVCB trong tuần tới", partner: "Viettel" },
-      { text: "Theo dõi tiến độ phê duyệt MobiFone — đề xuất escalate nếu chậm", partner: "MobiFone" },
-    ],
-  },
-  {
-    id: "manh",
-    name: "Team Mạnh",
-    sub: "Giáo dục · Trường học",
-    icon: "🎓",
-    iconBg: "rgba(16,217,160,0.12)",
-    dotColor: "#10d9a0",
-    status: "Đối tác mới",
-    statusColor: "#10d9a0",
-    statusBg: "rgba(16,217,160,0.1)",
-    warn: null,
-    info: "Liên cấp Thực Nghiệm — họp 3 bên xong, đang thống nhất dịch vụ triển khai.",
-    done: [
-      { text: "ĐH Đại Nam — thống nhất MOU, phối hợp tờ trình hiệu quả KD", partner: "ĐH Đại Nam" },
-      { text: "HV Chính sách — QR đang kết nối, PVconnect đang trao đổi", partner: "HV Chính sách" },
-      { text: "ĐH Bách Khoa — trao đổi HĐ, golive kết nối học phí PVconnect", partner: "ĐH Bách Khoa" },
-      { text: "ĐH Đông Đô — ký BBNT, HĐ, golive + trao đổi thanh toán tại quầy", partner: "ĐH Đông Đô" },
-      { text: "ĐH An Giang — phối hợp Thiên An kết nối QR/PVconnect/quầy, hoàn thiện HĐ 3 bên", partner: "Thiên An" },
-    ],
-    doing: [
-      { text: "Liên cấp Thực Nghiệm — họp 3 bên thống nhất dịch vụ, hỗ trợ CN đàm phán", partner: "Thực Nghiệm", isNew: true },
-      { text: "Tiếp tục đàm phán HV Tài Chính, CĐ Công Thương", partner: "HV Tài Chính" },
-    ],
-    plan: [
-      { text: "ĐH Đại Nam — hoàn thiện tờ trình & tính hiệu quả KD, lên kế hoạch lễ ký kết", partner: "ĐH Đại Nam" },
-      { text: "ĐH An Giang — chốt HĐ 3 bên với Thiên An", partner: "ĐH An Giang" },
-      { text: "Follow dự án MobiFone tuần tới", partner: "MobiFone" },
-    ],
-  },
-  {
-    id: "duy",
-    name: "Team Duy",
-    sub: "TGTT · Fintech",
-    icon: "💳",
-    iconBg: "rgba(167,139,250,0.12)",
-    dotColor: "#10d9a0",
-    status: "Đúng tiến độ",
-    statusColor: "#10d9a0",
-    statusBg: "rgba(16,217,160,0.1)",
-    warn: null,
-    info: null,
-    done: [
-      { text: "Phối hợp xây dựng giải pháp kết nối đối tác TGTT — nền tảng quản trị merchant", partner: "Merchant" },
-      { text: "Hỗ trợ đàm phán chính sách kinh doanh với các đối tác TGTT", partner: "TGTT" },
-    ],
-    doing: [
-      { text: "Phối hợp Phân khúc triển khai kế hoạch bán hàng tại thực địa cùng ĐVKD", partner: "ĐVKD" },
-      { text: "Hỗ trợ xây dựng tài liệu bán hàng cho nền tảng merchant", partner: "Merchant" },
-    ],
-    plan: [
-      { text: "Mở rộng đối tác TGTT/Fintech — thu/chi hộ, chia sẻ BĐSD", partner: "Fintech" },
-      { text: "Phát triển user CBNV từ hệ sinh thái đối tác", partner: "TGTT" },
-    ],
-  },
-  {
-    id: "hien",
-    name: "Team Hiền",
-    sub: "TGTT · Ví · Fintech",
-    icon: "👛",
-    iconBg: "rgba(245,166,35,0.12)",
-    dotColor: "#10d9a0",
-    status: "Đúng tiến độ",
-    statusColor: "#10d9a0",
-    statusBg: "rgba(16,217,160,0.1)",
-    warn: null,
-    info: null,
-    done: [
-      { text: "Tư vấn giải pháp số với các đối tác TGTT & Fintech", partner: "Gpay / OneFin" },
-      { text: "Hỗ trợ triển khai POS, cổng thanh toán, thu/chi hộ", partner: "Zalo Pay / Paytech" },
-    ],
-    doing: [
-      { text: "Phối hợp ĐVKD phát triển KHCN, HKD, mSME từ hệ sinh thái ví điện tử", partner: "Ví điện tử" },
-      { text: "Tiếp tục mở rộng đối tác TGTT — Fundiin, Paytech", partner: "Fundiin" },
-    ],
-    plan: [
-      { text: "Phát triển thêm đối tác Fintech mảng thu/chi hộ", partner: "Fintech" },
-      { text: "Khai thác CASA, phí dịch vụ từ hệ sinh thái ví và cổng thanh toán", partner: "TGTT" },
-    ],
-  },
-];
-
-// ============================================================
-// RENDER ENGINE
-// ============================================================
-let activeTeam = TEAMS[0].id;
-
-function renderTabs() {
-  const container = document.getElementById('teamTabs');
-  container.innerHTML = TEAMS.map(t => `
-    <div class="tab ${t.id === activeTeam ? 'active' : ''}" onclick="selectTeam('${t.id}')">
-      <div class="tab-dot" style="background:${t.dotColor}"></div>
-      ${t.name}
-      <span class="tab-status" style="color:${t.statusColor};background:${t.statusBg}">
-        ${t.status === 'Đúng tiến độ' ? '✓' : t.status === 'Chờ phê duyệt' ? '⏳' : '★'}
-      </span>
-    </div>
-  `).join('');
-}
-
-function renderItems(items) {
-  if (!items || items.length === 0) return '<div style="font-size:12px;color:var(--text3);padding:8px 0">Không có cập nhật</div>';
-  return items.map(i => `
-    <div class="work-item">
-      <div class="item-line" style="background:${i.isNew ? 'var(--amber)' : 'var(--accent)'}"></div>
-      <div class="item-content">
-        <div class="item-text">${i.text}</div>
-        <span class="item-tag">${i.partner}</span>
-        ${i.isNew ? '<span class="item-tag new">★ Mới</span>' : ''}
-      </div>
-    </div>
-  `).join('');
-}
-
-function renderPanel() {
-  const t = TEAMS.find(x => x.id === activeTeam);
-  document.getElementById('detailPanel').innerHTML = `
-    <div class="panel-header">
-      <div class="panel-header-left">
-        <div class="team-icon" style="background:${t.iconBg}">${t.icon}</div>
-        <div>
-          <div class="panel-title">${t.name}</div>
-          <div class="panel-sub">${t.sub}</div>
-        </div>
-      </div>
-      <div class="status-badge" style="color:${t.statusColor};background:${t.statusBg}">
-        <div style="width:6px;height:6px;border-radius:50%;background:${t.statusColor}"></div>
-        ${t.status}
-      </div>
-    </div>
-    ${t.warn ? `<div class="banner warn"><span class="banner-icon">⚠</span><span>${t.warn}</span></div>` : ''}
-    ${t.info ? `<div class="banner info"><span class="banner-icon">★</span><span>${t.info}</span></div>` : ''}
-    <div class="col-grid">
-      <div class="col">
-        <div class="col-header" style="color:var(--green)">✓ &nbsp;Đã làm</div>
-        ${renderItems(t.done)}
-      </div>
-      <div class="col">
-        <div class="col-header" style="color:var(--blue)">⟳ &nbsp;Đang làm</div>
-        ${renderItems(t.doing)}
-      </div>
-      <div class="col">
-        <div class="col-header" style="color:var(--purple)">→ &nbsp;${NEXT_WEEK}</div>
-        ${renderItems(t.plan)}
-      </div>
-    </div>
-  `;
-}
-
-function selectTeam(id) {
-  activeTeam = id;
-  renderTabs();
-  renderPanel();
-}
-
-// Init
-document.getElementById('weekBadge').textContent = WEEK_LABEL;
-document.getElementById('updateTime').textContent = 'Cập nhật: ' + UPDATE_DATE;
-document.getElementById('m2').textContent = METRICS.m2.value;
-document.getElementById('m2').nextElementSibling.textContent = METRICS.m2.sub;
-document.getElementById('m3').textContent = METRICS.m3.value;
-document.getElementById('m3').nextElementSibling.textContent = METRICS.m3.sub;
-document.getElementById('m4').textContent = METRICS.m4.value;
-document.getElementById('m4').nextElementSibling.textContent = METRICS.m4.sub;
-
-renderTabs();
-renderPanel();
+const T=[{id:"bach",name:"Team Bách",icon:"🏥",sub:"Y tế · Phòng khám",iconBg:"rgba(239,68,68,0.15)",iconColor:"#f87171",status:"Đúng tiến độ",statusColor:"#10d9a0",statusBg:"rgba(16,217,160,0.1)",statusSym:"✓",warnHtml:"",done:`<div class="empty">Không có cập nhật</div>`,doing:`<div class="work-item"><div class="item-line" style="background:var(--accent)"></div><div class="item-content"><div class="item-text">Đề xuất hỗ trợ</div><span class="tag partner">Nội bộ</span></div></div>`,plan:`<div class="empty">Không có cập nhật</div>`},
+{id:"phong",name:"Team Phong",icon:"📡",sub:"Viễn thông · HKD",iconBg:"rgba(77,159,255,0.15)",iconColor:"#4d9fff",status:"Đúng tiến độ",statusColor:"#10d9a0",statusBg:"rgba(16,217,160,0.1)",statusSym:"✓",warnHtml:"",done:`<div class="empty">Không có cập nhật</div>`,doing:`<div class="work-item"><div class="item-line" style="background:var(--accent)"></div><div class="item-content"><div class="item-text">Đề xuất hỗ trợ</div><span class="tag partner">Nội bộ</span></div></div>`,plan:`<div class="empty">Không có cập nhật</div>`},
+{id:"manh",name:"Team Mạnh",icon:"🎓",sub:"Giáo dục · Trường học",iconBg:"rgba(16,217,160,0.12)",iconColor:"#10d9a0",status:"Đúng tiến độ",statusColor:"#10d9a0",statusBg:"rgba(16,217,160,0.1)",statusSym:"✓",warnHtml:"",done:`<div class="empty">Không có cập nhật</div>`,doing:`<div class="work-item"><div class="item-line" style="background:var(--accent)"></div><div class="item-content"><div class="item-text">Đề xuất hỗ trợ</div><span class="tag partner">Nội bộ</span></div></div>`,plan:`<div class="empty">Không có cập nhật</div>`},
+{id:"duy",name:"Team Duy",icon:"💳",sub:"TGTT · Fintech",iconBg:"rgba(167,139,250,0.12)",iconColor:"#a78bfa",status:"Đúng tiến độ",statusColor:"#10d9a0",statusBg:"rgba(16,217,160,0.1)",statusSym:"✓",warnHtml:"",done:`<div class="empty">Không có cập nhật</div>`,doing:`<div class="work-item"><div class="item-line" style="background:var(--accent)"></div><div class="item-content"><div class="item-text">Đề xuất hỗ trợ</div><span class="tag partner">Nội bộ</span></div></div>`,plan:`<div class="empty">Không có cập nhật</div>`},
+{id:"hien",name:"Team Hiền",icon:"👛",sub:"TGTT · Ví · Fintech",iconBg:"rgba(245,166,35,0.12)",iconColor:"#f5a623",status:"Đúng tiến độ",statusColor:"#10d9a0",statusBg:"rgba(16,217,160,0.1)",statusSym:"✓",warnHtml:"",done:`<div class="empty">Không có cập nhật</div>`,doing:`<div class="work-item"><div class="item-line" style="background:var(--accent)"></div><div class="item-content"><div class="item-text">Đề xuất hỗ trợ</div><span class="tag partner">Nội bộ</span></div></div>`,plan:`<div class="empty">Không có cập nhật</div>`}];
+let cur=T[0].id;
+function tabs(){document.getElementById('tabs').innerHTML=T.map(t=>`<div class="tab ${t.id===cur?'active':''}" onclick="sel('${t.id}')"><div class="tdot" style="background:${t.statusColor}"></div>${t.name}<span class="tstt" style="color:${t.statusColor};background:${t.statusBg}">${t.statusSym}</span></div>`).join('');}
+function panel(){const t=T.find(x=>x.id===cur);document.getElementById('panel').innerHTML=`<div class="ph"><div class="phl"><div class="tico" style="background:${t.iconBg}">${t.icon}</div><div><div class="pt">${t.name}</div><div class="ps">${t.sub}</div></div></div><div class="sbdg" style="color:${t.statusColor};background:${t.statusBg}"><div style="width:6px;height:6px;border-radius:50%;background:${t.statusColor}"></div>${t.status}</div></div>${t.warnHtml}<div class="cg"><div class="col"><div class="ch" style="color:var(--green)">✓ Đã làm</div>${t.done}</div><div class="col"><div class="ch" style="color:var(--blue)">⟳ Đang làm</div>${t.doing}</div><div class="col"><div class="ch" style="color:var(--purple)">→ Kế hoạch</div>${t.plan}</div></div>`;}
+function sel(id){cur=id;tabs();panel();}
+tabs();panel();
 </script>
 </body>
 </html>
